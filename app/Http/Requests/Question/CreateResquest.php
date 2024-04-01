@@ -19,7 +19,7 @@ class CreateResquest extends FormRequest
     public function rules(): array
     {
         return [
-            'question' => ['required', 'min:10', 'max:500'],
+            'question' => ['required', 'min:10', 'max:500', 'ends_with:?'],
         ];
     }
 }

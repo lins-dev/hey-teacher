@@ -29,19 +29,37 @@ it('should be create a question bigger than 255 characters', function () {
 # artisan test --filter "should check if the question ends with ?"
 it('should check if the question ends with ?', function () {
     # Arrange
-    # Act
-    # Assert
-    $response = $this->get('/');
 
-    $response->assertStatus(200);
+    $user = User::factory()->create();
+    actingAs($user);
+
+    # Act
+    $request = post(route('question.store'), [
+        'question' => str_repeat('*', 11),
+    ]);
+
+    # Assert
+    $request->assertSessionHasErrors(['question']);
+    assertDatabaseCount('questions', 0);
 });
 
 # artisan test --filter "should have at least 10 characters"
 it('should have at least 10 characters', function () {
     # Arrange
-    # Act
-    # Assert
-    $response = $this->get('/');
 
-    $response->assertStatus(200);
+    $user = User::factory()->create();
+    actingAs($user);
+
+    # Act
+    $request = post(route('question.store'), [
+        'question' => str_repeat('*', 7) . '?',
+    ]);
+
+    # Assert
+    $request->assertSessionHasErrors([
+        'question' => __('validation.min.string', [
+            'min' => 10, 'attribute' => 'question',
+        ]),
+    ]);
+    assertDatabaseCount('questions', 0);
 });
