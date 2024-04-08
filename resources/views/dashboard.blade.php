@@ -12,6 +12,10 @@
             <x-questions.submit-button>Save</x-questions>
             <x-questions.reset-button>Cancel</x-questions>
         </x-questions.form>
+
+        <hr class="my-4 border-gray-700 border-dashed">
+
+        <div> Questions List</div>
     </x-questions.container>
     
 </x-app-layout>
