@@ -15,7 +15,13 @@
 
         <hr class="my-4 border-gray-700 border-dashed">
 
-        <div> Questions List</div>
+        <div class="mb-1 font-bold uppercase dark:text-gray-300"> Questions List</div>
+        <div class="space-y-4 dark:text-gray-400">
+            @foreach ($questions as $q)
+            <x-questions.question :question="$q"></x-questions>
+            @endforeach
+        </div>
+        
     </x-questions.container>
     
 </x-app-layout>
