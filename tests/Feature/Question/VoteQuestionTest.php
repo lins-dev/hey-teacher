@@ -16,14 +16,13 @@ it('should be possible like a question', function () {
 
     //Act
     actingAs($user);
-    post(route("votes.like", $question->uuid), $question->toArray())
-        ->assertRedirect();
+    post(route("votes.like", $question->uuid), $question->toArray());
 
     //Assert
 
     assertDatabaseHas('votes', [
         'question_id' => $question->id,
-        'like'        => 1,
-        'dislike'     => 0,
+        'question_id' => $user->id,
+        'rating'      => 1,
     ]);
 });

@@ -14,9 +14,9 @@ return new class () extends Migration {
             $table->id();
             $table->uuid('uuid');
 
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('question_id')->constrained('questions')->cascadeOnDelete();
-            $table->unsignedInteger('like')->default(0);
-            $table->unsignedInteger('dislike')->default(0);
+            $table->unsignedTinyInteger('rating')->default(0);
 
             $table->timestamps();
         });
