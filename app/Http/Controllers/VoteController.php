@@ -16,4 +16,13 @@ class VoteController extends Controller
 
         return back();
     }
+
+    public function dislike(Request $request, string $questionUuid): RedirectResponse
+    {
+
+        $question = Question::query()->where('uuid', '=', $questionUuid)->firstOrFail();
+        auth()->user()->dislike($question);
+
+        return back();
+    }
 }

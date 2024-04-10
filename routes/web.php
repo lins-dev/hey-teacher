@@ -34,6 +34,7 @@ Route::controller(VoteController::class)
     ->prefix('/votes')
     ->group(function () {
         Route::post('/like/{question_uuid}', 'like')->name('votes.like');
+        Route::post('/dislike/{question_uuid}', 'dislike')->name('votes.dislike');
     });
 
 require __DIR__ . '/auth.php';

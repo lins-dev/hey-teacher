@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,5 +32,19 @@ class Question extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    public function likes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->votes()->where('rating', '=', 1)->count(),
+        );
+    }
+
+    public function dislikes(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->votes()->where('rating', '=', 0)->count(),
+        );
     }
 }
