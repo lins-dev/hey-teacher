@@ -7,7 +7,7 @@
     </x-slot>
     
     <x-questions.container>
-        <x-questions.form post :action="route('question.store')">
+        <x-questions.form post :action="route('questions.store')">
             <x-questions.text-area label="Question" name="question"></x-questions>
             <x-questions.submit-button>Save</x-questions>
             <x-questions.reset-button>Cancel</x-questions>

@@ -16,7 +16,7 @@ it('should be create a question bigger than 255 characters', function () {
     actingAs($user);
 
     # Act
-    $request = post(route('question.store'), [
+    $request = post(route('questions.store'), [
         'question' => str_repeat('*', 260) . '?',
     ]);
 
@@ -34,7 +34,7 @@ it('should check if the question ends with ?', function () {
     actingAs($user);
 
     # Act
-    $request = post(route('question.store'), [
+    $request = post(route('questions.store'), [
         'question' => str_repeat('*', 11),
     ]);
 
@@ -51,7 +51,7 @@ it('should have at least 10 characters', function () {
     actingAs($user);
 
     # Act
-    $request = post(route('question.store'), [
+    $request = post(route('questions.store'), [
         'question' => str_repeat('*', 7) . '?',
     ]);
 
