@@ -2,21 +2,26 @@
 
 namespace App\Models;
 
-use App\Observers\QuestionObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[ObservedBy(QuestionObserver::class)]
 class Question extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use HasUuids;
 
     protected $fillable = [
         'question',
     ];
+
+    public function uniqueIds(): array
+    {
+        //your new column name
+        return ['uuid'];
+    }
 
     protected $casts = [
         'deleted_at' => 'datetime',
