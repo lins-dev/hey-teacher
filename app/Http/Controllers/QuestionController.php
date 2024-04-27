@@ -64,4 +64,14 @@ class QuestionController extends Controller
     {
         //
     }
+
+    public function publish(Request $request, string $uuid): RedirectResponse
+    {
+        $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
+        $question->update([
+            'is_draft' => false,
+        ]);
+
+        return back();
+    }
 }
