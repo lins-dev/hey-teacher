@@ -15,6 +15,7 @@ return new class () extends Migration {
             $table->uuid('uuid');
 
             $table->text('question')->nullable();
+            $table->boolean('is_draft')->default(true);
 
             $table->timestamps();
             $table->softDeletes();

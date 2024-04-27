@@ -16,6 +16,7 @@ class Question extends Model
 
     protected $fillable = [
         'question',
+        'is_draft',
     ];
 
     public function uniqueIds(): array
@@ -26,6 +27,7 @@ class Question extends Model
 
     protected $casts = [
         'deleted_at' => 'datetime',
+        'is_draft'   => 'boolean',
     ];
 
     public function votes(): HasMany

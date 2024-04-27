@@ -63,3 +63,21 @@ it('should have at least 10 characters', function () {
     ]);
     assertDatabaseCount('questions', 0);
 });
+
+# artisan test --filter "should be create a question as a draft all the time"
+it('should be create a question as a draft all the time', function () {
+    # Arrange
+
+    $user = User::factory()->create();
+    actingAs($user);
+
+    # Act
+    $request = post(route('questions.store'), [
+        'question' => str_repeat('*', 55) . '?',
+    ]);
+
+    # Assert
+    $request->assertRedirect(route('dashboard'));
+    assertDatabaseCount('questions', 1);
+    assertDatabaseHas('questions', ['is_draft' => true]);
+});
