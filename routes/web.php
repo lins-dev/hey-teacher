@@ -30,6 +30,7 @@ Route::controller(QuestionController::class)
     ->group(function () {
         Route::post('/', 'store')->name('questions.store');
         Route::put('/publish/{question_uuid}', 'publish')->name('questions.publish');
+        Route::get('/', 'index')->name('questions.index');
     });
 
 Route::controller(VoteController::class)

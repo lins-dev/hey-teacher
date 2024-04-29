@@ -11,12 +11,11 @@ use Illuminate\Support\Facades\Gate;
 
 class QuestionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): void
+    public function index()
     {
-        //
+        return view('question.index', [
+            'questions' => auth()->user()->questions,
+        ]);
     }
 
     /**
@@ -33,7 +32,7 @@ class QuestionController extends Controller
         $data['created_by'] = auth()->user()->id;
         Question::create($data);
 
-        return to_route('dashboard');
+        return back();
     }
 
     /**

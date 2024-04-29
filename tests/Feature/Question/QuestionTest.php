@@ -21,7 +21,7 @@ it('should be create a question bigger than 255 characters', function () {
     ]);
 
     # Assert
-    $request->assertRedirect(route('dashboard'));
+    $request->assertRedirect();
     assertDatabaseCount('questions', 1);
     assertDatabaseHas('questions', ['question' => str_repeat('*', 260) . '?']);
 });
@@ -77,7 +77,7 @@ it('should be create a question as a draft all the time', function () {
     ]);
 
     # Assert
-    $request->assertRedirect(route('dashboard'));
+    $request->assertRedirect();
     assertDatabaseCount('questions', 1);
     assertDatabaseHas('questions', ['is_draft' => true]);
 });
