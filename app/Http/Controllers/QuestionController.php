@@ -7,6 +7,7 @@ use App\Models\Question;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class QuestionController extends Controller
 {
@@ -70,7 +71,8 @@ class QuestionController extends Controller
     public function publish(Request $request, string $uuid): RedirectResponse
     {
         $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
-        abort_unless(auth()->user()->can('publish', $question), Response::HTTP_FORBIDDEN);
+        Gate::authorize('publish', $question);
+        // abort_unless(auth()->user()->can('publish', $question), Response::HTTP_FORBIDDEN);
 
         $question->update([
             'is_draft' => false,
