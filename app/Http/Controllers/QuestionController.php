@@ -6,6 +6,7 @@ use App\Http\Requests\Question\CreateResquest;
 use App\Models\Question;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class QuestionController extends Controller
 {
@@ -27,7 +28,8 @@ class QuestionController extends Controller
 
     public function store(CreateResquest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data               = $request->validated();
+        $data['created_by'] = auth()->user()->id;
         Question::create($data);
 
         return to_route('dashboard');
@@ -68,6 +70,8 @@ class QuestionController extends Controller
     public function publish(Request $request, string $uuid): RedirectResponse
     {
         $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
+        abort_unless(!auth()->user()->can('publish', $question), Response::HTTP_FORBIDDEN);
+
         $question->update([
             'is_draft' => false,
         ]);

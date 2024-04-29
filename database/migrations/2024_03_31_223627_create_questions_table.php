@@ -13,6 +13,7 @@ return new class () extends Migration {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
+            $table->foreignId('created_by')->constrained('users', 'id');
 
             $table->text('question')->nullable();
             $table->boolean('is_draft')->default(true);

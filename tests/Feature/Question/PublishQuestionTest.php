@@ -24,3 +24,25 @@ it('should be able to publish a question', function () {
     # Assert
     expect($question->is_draft)->toBeFalse();
 });
+
+# artisan test --filter "should make sure that only the user who as created the question can publish the question"
+it('should make sure that only the user who as created the question can publish the question', function () {
+
+    #Arrange
+    $correctUser = User::factory()->create();
+    $wrongUser   = User::factory()->create();
+
+    $question = Question::factory()->create(['created_by' => $wrongUser->id]);
+
+    #Act
+    actingAs($wrongUser);
+
+    put(route('questions.publish', $question->uuid))->assertForbidden();
+
+    actingAs($correctUser);
+
+    put(route('questions.publish', $question->uuid))->assertRedirect();
+
+    #Assert
+
+});
