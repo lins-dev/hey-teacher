@@ -70,7 +70,7 @@ class QuestionController extends Controller
     public function publish(Request $request, string $uuid): RedirectResponse
     {
         $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
-        abort_unless(!auth()->user()->can('publish', $question), Response::HTTP_FORBIDDEN);
+        abort_unless(auth()->user()->can('publish', $question), Response::HTTP_FORBIDDEN);
 
         $question->update([
             'is_draft' => false,

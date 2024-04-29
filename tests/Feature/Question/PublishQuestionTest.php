@@ -12,7 +12,7 @@ it('should be able to publish a question', function () {
     # Arrange
 
     $user     = User::factory()->create();
-    $question = Question::factory()->create();
+    $question = Question::factory()->create(['created_by' => $user->id]);
 
     # Act
     actingAs($user);
@@ -32,7 +32,7 @@ it('should make sure that only the user who as created the question can publish 
     $correctUser = User::factory()->create();
     $wrongUser   = User::factory()->create();
 
-    $question = Question::factory()->create(['created_by' => $wrongUser->id]);
+    $question = Question::factory()->create(['created_by' => $correctUser->id]);
 
     #Act
     actingAs($wrongUser);
