@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::controller(QuestionController::class)
+    ->middleware('auth')
     ->prefix('/questions')
     ->group(function () {
         Route::post('/', 'store')->name('questions.store');

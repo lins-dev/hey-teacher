@@ -81,3 +81,16 @@ it('should be create a question as a draft all the time', function () {
     assertDatabaseCount('questions', 1);
     assertDatabaseHas('questions', ['is_draft' => true]);
 });
+
+# artisan test --filter "should only allows authenticated users can create a question"
+it('should only allows authenticated users can create a question', function () {
+    # Arrange
+
+    # Act
+    post(route('questions.store'), [
+        'question' => str_repeat('*', 55) . '?',
+    ])->assertRedirect(route('login'));
+
+    # Assert
+
+});
