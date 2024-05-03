@@ -31,6 +31,7 @@ Route::controller(QuestionController::class)
         Route::post('/', 'store')->name('questions.store');
         Route::put('/publish/{question_uuid}', 'publish')->name('questions.publish');
         Route::get('/', 'index')->name('questions.index');
+        Route::delete('/{question_uuid}', 'destroy')->name('questions.destroy');
     });
 
 Route::controller(VoteController::class)

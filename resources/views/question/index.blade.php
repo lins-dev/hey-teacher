@@ -15,11 +15,57 @@
 
         <hr class="my-4 border-gray-700 border-dashed">
 
-        <div class="mb-1 font-bold uppercase dark:text-gray-300"> Questions List</div>
+        <div class="py-3 mb-1 font-bold uppercase dark:text-gray-300"> Drafts</div>
         <div class="space-y-4 dark:text-gray-400">
-            @foreach ($questions as $q)
-            <x-questions.question :question="$q"></x-questions>
-            @endforeach
+            <x-table.default>
+                <x-table.thead>
+                    <tr>
+                        <x-table.th> Questions </x-table.th>
+                        <x-table.th> Actions </x-table.th>
+                    </tr>
+                </x-table.thead>
+                <x-table.tr>
+                    @foreach ($questions->where('is_draft', '=', true) as $q)
+                        <x-table.td>
+                           {{$q->question}}
+                        </x-table.td>
+                        <x-table.td>
+                            <x-questions.form :action="route('questions.publish', $q->uuid)" put>
+                                <x-questions.submit-button type="submit">Publish</x-questions.submit-button>
+                            </x-questions.form>
+                            <x-questions.form :action="route('questions.destroy', $q->uuid)" delete>
+                                <x-questions.reset-button>Delete</x-questions.reset-button>
+                            </x-questions.form>
+                         </x-table.td>
+                    @endforeach
+                </x-table.tr>
+            </x-table.default>
+            
+        </div>
+
+        <div class="py-3 mb-1 font-bold uppercase dark:text-gray-300"> My Questions</div>
+        <div class="space-y-4 dark:text-gray-400">
+            <x-table.default>
+                <x-table.thead>
+                    <tr>
+                        <x-table.th> Questions </x-table.th>
+                        <x-table.th> Actions </x-table.th>
+                    </tr>
+                </x-table.thead>
+                <x-table.tr>
+                    @foreach ($questions->where('is_draft', '=', false) as $q)
+                        <x-table.td>
+                           {{$q->question}}
+                        </x-table.td>
+                        <x-table.td>
+                            <x-questions.form :action="route('questions.destroy', $q->uuid)" delete>
+                                <x-questions.reset-button>Delete</x-questions.reset-button>
+                            </x-questions.form>
+                         </x-table.td>
+                    @endforeach
+                </x-table.tr>
+            </x-table.default>
+            
         </div>
         
     </x-questions.container>

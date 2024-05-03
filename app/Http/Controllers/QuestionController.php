@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Question\CreateResquest;
 use App\Models\Question;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Gate;
 
 class QuestionController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('question.index', [
             'questions' => auth()->user()->questions,
@@ -62,9 +63,18 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Question $question): void
+    public function destroy(string $uuid): RedirectResponse
     {
-        //
+        try {
+            $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
+        } catch (\Throwable $th) {
+            return back(Response::HTTP_NOT_FOUND);
+        }
+
+        Gate::authorize('destroy', $question);
+        $question->delete();
+
+        return back();
     }
 
     public function publish(Request $request, string $uuid): RedirectResponse
