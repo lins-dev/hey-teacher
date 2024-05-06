@@ -24,21 +24,25 @@
                         <x-table.th> Actions </x-table.th>
                     </tr>
                 </x-table.thead>
-                <x-table.tr>
+                <tbody>
                     @foreach ($questions->where('is_draft', '=', true) as $q)
-                        <x-table.td>
-                           {{$q->question}}
-                        </x-table.td>
-                        <x-table.td>
-                            <x-questions.form :action="route('questions.publish', $q->uuid)" put>
-                                <x-questions.submit-button type="submit">Publish</x-questions.submit-button>
-                            </x-questions.form>
-                            <x-questions.form :action="route('questions.destroy', $q->uuid)" delete>
-                                <x-questions.reset-button>Delete</x-questions.reset-button>
-                            </x-questions.form>
-                         </x-table.td>
+                        <x-table.tr>
+                            <x-table.td>
+                                {{$q->question}}
+                            </x-table.td>
+                            <x-table.td>
+                                <x-questions.form :action="route('questions.publish', $q->uuid)" put>
+                                    <x-questions.submit-button type="submit">Publish</x-questions.submit-button>
+                                </x-questions.form>
+                                <x-questions.form :action="route('questions.destroy', $q->uuid)" delete>
+                                    <x-questions.delete-button>Delete</x-questions.delete-button>
+                                </x-questions.form>
+                            </x-table.td>
+                        </x-table.tr>
                     @endforeach
-                </x-table.tr>
+                    
+                </tbody>
+                
             </x-table.default>
             
         </div>
@@ -52,18 +56,22 @@
                         <x-table.th> Actions </x-table.th>
                     </tr>
                 </x-table.thead>
-                <x-table.tr>
+                <tbody>
                     @foreach ($questions->where('is_draft', '=', false) as $q)
-                        <x-table.td>
-                           {{$q->question}}
-                        </x-table.td>
-                        <x-table.td>
-                            <x-questions.form :action="route('questions.destroy', $q->uuid)" delete>
-                                <x-questions.reset-button>Delete</x-questions.reset-button>
-                            </x-questions.form>
-                         </x-table.td>
+                        <x-table.tr>
+                            <x-table.td>
+                                {{$q->question}}
+                            </x-table.td>
+                            <x-table.td>
+                                <x-questions.form :action="route('questions.destroy', $q->uuid)" delete>
+                                    <x-questions.delete-button>Delete</x-questions.delete-button>
+                                </x-questions.form>
+                            </x-table.td>
+                        </x-table.tr>
                     @endforeach
-                </x-table.tr>
+                    
+                </tbody>
+                
             </x-table.default>
             
         </div>
