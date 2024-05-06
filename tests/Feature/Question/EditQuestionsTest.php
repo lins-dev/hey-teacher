@@ -62,3 +62,25 @@ it('should make sure that only question with status DRAFT can be edited', functi
     get(route('questions.edit', $questionPublished->uuid))->assertForbidden();
     get(route('questions.edit', $questionDraft->uuid))->assertSuccessful();
 });
+
+# artisan test --filter "should make sure that only the user who as created the question can edit the question"
+it('should make sure that only the user who as created the question can edit the question', function () {
+
+    #Arrange
+    $correctUser = User::factory()->create();
+    $wrongUser   = User::factory()->create();
+
+    $question = Question::factory()->create(['created_by' => $correctUser->id]);
+
+    #Act
+    actingAs($wrongUser);
+
+    get(route('questions.edit', $question->uuid))->assertForbidden();
+
+    actingAs($correctUser);
+
+    get(route('questions.edit', $question->uuid))->assertSuccessful();
+
+    #Assert
+
+});
