@@ -44,10 +44,7 @@ class QuestionController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Question $question): void
+    public function edit(string $uuid): void
     {
         //
     }
