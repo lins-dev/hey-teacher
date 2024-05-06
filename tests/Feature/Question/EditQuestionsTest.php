@@ -38,3 +38,27 @@ it('should return a view', function () {
     get(route('questions.edit', $question->uuid))
         ->assertViewIs('question.edit');
 });
+
+# artisan test --filter "should make sure that only question with status DRAFT can be edited"
+it('should make sure that only question with status DRAFT can be edited', function () {
+
+    //Arrange
+    $user          = User::factory()->create();
+    $questionDraft = Question::factory()->create([
+        'created_by' => $user->id,
+        'is_draft'   => true,
+    ]);
+    $questionPublished = Question::factory()->create([
+        'created_by' => $user->id,
+        'is_draft'   => false,
+    ]);
+    dump($questionDraft->toArray());
+    dump($questionPublished->toArray());
+
+    //Act
+    actingAs($user);
+
+    //Assert
+    get(route('questions.edit', $questionPublished->uuid))->assertForbidden();
+    get(route('questions.edit', $questionDraft->uuid))->assertSuccessful();
+});

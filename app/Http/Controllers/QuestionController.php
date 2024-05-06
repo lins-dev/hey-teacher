@@ -47,6 +47,7 @@ class QuestionController extends Controller
     public function edit(string $uuid): View
     {
         $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
+        Gate::authorize('update', $question);
 
         return view('question.edit', ['question' => $question]);
     }
