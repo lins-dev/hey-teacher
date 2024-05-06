@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Question\CreateResquest;
 use App\Models\Question;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 
 class QuestionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): void
+    public function index(): View
     {
-        //
+        return view('question.index', [
+            'questions' => auth()->user()->questions,
+        ]);
     }
 
     /**
@@ -27,10 +29,11 @@ class QuestionController extends Controller
 
     public function store(CreateResquest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data               = $request->validated();
+        $data['created_by'] = auth()->user()->id;
         Question::create($data);
 
-        return to_route('dashboard');
+        return back();
     }
 
     /**
@@ -60,8 +63,30 @@ class QuestionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Question $question): void
+    public function destroy(string $uuid): RedirectResponse
     {
-        //
+        try {
+            $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
+        } catch (\Throwable $th) {
+            return back(Response::HTTP_NOT_FOUND);
+        }
+
+        Gate::authorize('destroy', $question);
+        $question->delete();
+
+        return back();
+    }
+
+    public function publish(Request $request, string $uuid): RedirectResponse
+    {
+        $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
+        Gate::authorize('publish', $question);
+        // abort_unless(auth()->user()->can('publish', $question), Response::HTTP_FORBIDDEN);
+
+        $question->update([
+            'is_draft' => false,
+        ]);
+
+        return back();
     }
 }
