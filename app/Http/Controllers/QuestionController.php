@@ -44,9 +44,11 @@ class QuestionController extends Controller
         //
     }
 
-    public function edit(string $uuid): void
+    public function edit(string $uuid): View
     {
-        //
+        $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
+
+        return view('question.edit', ['question' => $question]);
     }
 
     /**
