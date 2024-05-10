@@ -26,7 +26,7 @@ class DashboardController extends Controller
                     $query->where('rating', '=', 0);
                 },
             ])
-            ->get(),
+            ->paginate(5),
         ]);
     }
 }
