@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Question\CreateResquest;
+use App\Http\Requests\Question\CreateAndUpdateRequest;
 use App\Models\Question;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -27,7 +27,7 @@ class QuestionController extends Controller
         //
     }
 
-    public function store(CreateResquest $request): RedirectResponse
+    public function store(CreateAndUpdateRequest $request): RedirectResponse
     {
         $data               = $request->validated();
         $data['created_by'] = auth()->user()->id;
@@ -52,12 +52,13 @@ class QuestionController extends Controller
         return view('question.edit', ['question' => $question]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Question $question): void
+    public function update(CreateAndUpdateRequest $request, string $uuid): RedirectResponse
     {
-        //
+        $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
+        $data     = $request->validated();
+        $question->update($data);
+
+        return back();
     }
 
     /**

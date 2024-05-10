@@ -33,6 +33,7 @@ Route::controller(QuestionController::class)
         Route::get('/', 'index')->name('questions.index');
         Route::delete('/{question_uuid}', 'destroy')->name('questions.destroy');
         Route::get('/{question_uuid}/edit', 'edit')->name('questions.edit');
+        Route::put('/{question_uuid}', 'update')->name('questions.update');
     });
 
 Route::controller(VoteController::class)
