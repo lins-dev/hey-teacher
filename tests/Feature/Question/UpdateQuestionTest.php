@@ -23,7 +23,7 @@ it('should be able to update a question', function () {
     //Assert
     put(route('questions.update', $question->uuid), [
         'question' => 'Updated Question?',
-    ])->assertRedirect();
+    ])->assertRedirect(route('questions.index'));
 
     $question->refresh();
 

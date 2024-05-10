@@ -59,7 +59,7 @@ class QuestionController extends Controller
         $data = $request->validated();
         $question->update($data);
 
-        return back();
+        return to_route('questions.index');
     }
 
     /**
