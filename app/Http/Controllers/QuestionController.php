@@ -55,7 +55,8 @@ class QuestionController extends Controller
     public function update(CreateAndUpdateRequest $request, string $uuid): RedirectResponse
     {
         $question = Question::query()->where('uuid', '=', $uuid)->firstOrFail();
-        $data     = $request->validated();
+        Gate::authorize('update', $question);
+        $data = $request->validated();
         $question->update($data);
 
         return back();
