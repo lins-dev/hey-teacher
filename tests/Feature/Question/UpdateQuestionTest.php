@@ -3,6 +3,8 @@ use App\Models\Question;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
+use function Pest\Laravel\assertDatabaseCount;
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\put;
 
 #artisan test --filter=UpdateQuestionTest
@@ -81,4 +83,71 @@ it('should make sure that only the user who as created the question can update t
 
     #Assert
 
+});
+
+# artisan test --filter "should be update a question bigger than 255 characters"
+it('should be update a question bigger than 255 characters', function () {
+    # Arrange
+
+    $user = User::factory()->create();
+    actingAs($user);
+
+    $question = Question::factory()->create(['created_by' => $user->id]);
+
+    # Act
+
+    $request = put(route('questions.update', $question->uuid), [
+        'question' => str_repeat('*', 260) . '?',
+    ]);
+
+    # Assert
+    $request->assertRedirect();
+    assertDatabaseCount('questions', 1);
+    assertDatabaseHas('questions', ['question' => str_repeat('*', 260) . '?']);
+});
+
+# artisan test --filter "should check if the question ends with ? to update a question"
+it('should check if the question ends with ? to update a question', function () {
+    # Arrange
+
+    $user = User::factory()->create();
+    actingAs($user);
+    $question = Question::factory()->create(['created_by' => $user->id]);
+
+    # Act
+    $request = put(route('questions.update', $question->uuid), [
+        'question' => str_repeat('*', 12),
+    ]);
+
+    # Assert
+    $request->assertSessionHasErrors(['question']);
+    assertDatabaseCount('questions', 1);
+    assertDatabaseHas('questions', [
+        'question' => $question->question,
+    ]);
+});
+
+# artisan test --filter "should have at least 10 characters to update a question"
+it('should have at least 10 characters to update a question', function () {
+    # Arrange
+
+    $user = User::factory()->create();
+    actingAs($user);
+    $question = Question::factory()->create(['created_by' => $user->id]);
+
+    # Act
+    $request = put(route('questions.update', $question->uuid), [
+        'question' => str_repeat('*', 7) . '?',
+    ]);
+
+    # Assert
+    $request->assertSessionHasErrors([
+        'question' => __('validation.min.string', [
+            'min' => 10, 'attribute' => 'question',
+        ]),
+    ]);
+    assertDatabaseCount('questions', 1);
+    assertDatabaseHas('questions', [
+        'question' => $question->question,
+    ]);
 });
