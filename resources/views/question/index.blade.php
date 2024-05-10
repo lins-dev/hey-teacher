@@ -37,6 +37,7 @@
                                 <x-questions.form :action="route('questions.destroy', $q->uuid)" delete>
                                     <x-questions.delete-button>Delete</x-questions.delete-button>
                                 </x-questions.form>
+                                <a href="{{route('questions.edit', $q->uuid)}}" class="text-blue-500 hover:underline">Edit</a>
                             </x-table.td>
                         </x-table.tr>
                     @endforeach
